@@ -122,17 +122,6 @@ agg_df.info()
 # Yeni eklenecek değişkenin adı: customers_level_based
 # Önceki soruda elde edeceğiniz çıktıdaki gözlemleri bir araya getirerek customers_level_based değişkenini oluşturmanız gerekmektedir.
 
-# EMRE ÇÖZÜM
-#agg_df['customers_level_based'] = pd.concat([
-#    agg_df['COUNTRY'].str.upper(),
-#    agg_df['SOURCE'].str.upper(),
-#    agg_df['SEX'].str.upper(),
-#    agg_df['AGE_CAT'].astype(str)
-#], axis=1).agg('_'.join, axis=1)
-
-#persona = agg_df.groupby('customers_level_based').agg({'PRICE': 'mean'}).reset_index()
-
-
 agg_df["customers_level_based"] = [
     f"{row['COUNTRY'].upper()}_{row['SOURCE'].upper()}_{row['SEX'].upper()}_{row['AGE_CAT']}"
     for index, row in agg_df.iterrows()
@@ -157,7 +146,6 @@ persona["customers_level_based"].value_counts()
 # Segmentleri SEGMENT isimlendirmesi ile değişken olarak agg_df’e ekleyiniz.
 # Segmentleri betimleyiniz (Segmentlere göre group by yapıp price mean, max, sum’larını alınız).
 
-
 persona["SEGMENT"] = pd.qcut(persona["PRICE"], 4, labels=['D', 'C', 'B', 'A'])
 segment_sum = persona.groupby("SEGMENT", observed=True)[["PRICE"]].agg(['mean', 'max', 'sum'])
 
@@ -174,38 +162,3 @@ result2 = persona[persona["customers_level_based"] == new_user2]
 result = pd.concat([result1, result2], axis=0).reset_index()
 result["expected_total_revenue"] = result["PRICE"]
 results_final = result.drop(columns=["PRICE"])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
